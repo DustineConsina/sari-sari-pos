@@ -154,3 +154,7 @@ vercel.json               # Vercel routing + function config
 | `npm run dev` | Start the local dev server with auto-reload |
 | `npm start` | Start the local server (production-style, no reload) |
 | `npm run seed` | Create tables (if needed) and insert default accounts + sample products |
+
+## License
+
+Copyright &copy; 2026 rgrafia (SorSU). Licensed under the [MIT License](LICENSE).
