@@ -1,7 +1,9 @@
 <%- include('partials/head') %>
-<div class="login-page">
+<div class="login-page"><h2>
+class="welcome">Welcome to Jollibee!</h2>
   <form method="POST" action="/login" class="login-card">
-    <h1>🏪 Sari-Sari POS</h1>
+    <img src="/images/jollibee-logo.png" alt="Jollibee Logo" class="login-logo" />
+    <h1>Sari-Sari-Pos</h1>
     <p class="muted">Sign in to continue</p>
     <% if (flash && flash.error) { %><div class="alert alert-error"><%= flash.error %></div><% } %>
     <label>Username
