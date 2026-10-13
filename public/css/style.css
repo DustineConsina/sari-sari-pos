@@ -254,3 +254,7 @@ a { color: var(--primary); }
   font-size: 0.8rem;
   padding: 1.5rem 1rem;
 }
+.brand.logo {
+  height: 32px;
+  vertical-align: middle;
+}
