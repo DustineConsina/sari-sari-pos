@@ -158,6 +158,18 @@ a { color: var(--primary); }
   align-items: center;
   justify-content: center;
 }
+
+.login-logo {
+  display: block;
+  width: 120px;
+  margin: 0 auto;
+}
+ .welcome{
+  text-align: center;
+  color: #fff;
+  margin: 0 0 16px;
+ }
+ 
 .login-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
