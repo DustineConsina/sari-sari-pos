@@ -14,7 +14,7 @@
   </nav>
   <div class="topbar-user">
     <% if (currentUser) { %>
-      <span><%= currentUser.fullName %> (<%= currentUser.role === 'admin' ? 'Admin' : 'User' %>)</span>
+      <span><%= currentUser.fullName %> (<%= currentUser.role === 'admin' ? 'Admin' : 'Sales Rep' %>)</span>
       <form method="POST" action="/logout" class="inline-form">
         <button type="submit" class="link-button">Logout</button>
       </form>
