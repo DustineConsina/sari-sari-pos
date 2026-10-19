@@ -50,7 +50,7 @@ a { color: var(--primary); }
   font-weight: 700;
   font-size: 1.25rem;
 }
-.brand-logo { height: 38px; width: 38px; }
+.brand-logo { height: 38px; width: auto; object-fit: contain;}
 .topbar-nav { display: flex; gap: 0.5rem; flex: 1; flex-wrap: wrap; }
 .topbar-nav a {
   text-decoration: none;
