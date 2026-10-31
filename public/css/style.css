@@ -1,14 +1,17 @@
 :root {
-  --bg: #f4f6f8;
+  --bg: #fff8e7;
   --card-bg: #ffffff;
-  --border: #e1e5ea;
-  --text: #1a202c;
-  --muted: #718096;
-  --primary: #2b6cb0;
-  --primary-dark: #1e4e7f;
+  --border: #f1dcc0;
+  --text: #2b1a1a;
+  --muted: #7a6a5f;
+  --primary: #d7262f;
+  --primary-dark: #a81a22;
+  --accent: #ffc72c;
+  --accent-dark: #e6a800;
   --success: #2f855a;
   --danger: #c53030;
   --warning: #dd6b20;
+  --radius: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -16,7 +19,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Fredoka", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
 }
@@ -33,21 +36,37 @@ a { color: var(--primary); }
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border);
+  background: var(--primary);
+  border-bottom: 4px solid var(--accent);
   padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(168, 26, 34, 0.25);
 }
 
-.topbar-brand { font-weight: 700; font-size: 1.1rem; }
-.topbar-nav { display: flex; gap: 1rem; flex: 1; }
-.topbar-nav a { text-decoration: none; color: var(--text); font-weight: 500; }
-.topbar-nav a:hover { color: var(--primary); }
-.topbar-user { display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: 0.9rem; }
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.brand-logo { height: 38px; width: auto; object-fit: contain;}
+.topbar-nav { display: flex; gap: 0.5rem; flex: 1; flex-wrap: wrap; }
+.topbar-nav a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+}
+.topbar-nav a:hover { background: var(--accent); color: var(--text); }
+.topbar-user { display: flex; align-items: center; gap: 0.75rem; color: #ffe9b0; font-size: 0.9rem; }
 
 .link-button {
   background: none;
   border: none;
-  color: var(--primary);
+  color: var(--accent);
+  font-weight: 600;
   cursor: pointer;
   font: inherit;
   padding: 0;
@@ -63,9 +82,10 @@ a { color: var(--primary); }
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 1.25rem;
   margin-bottom: 1.25rem;
+  box-shadow: 0 2px 6px rgba(120, 70, 20, 0.08);
 }
 
 .grid-2 {
@@ -88,11 +108,13 @@ a { color: var(--primary); }
 .stat-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
+  border-top: 5px solid var(--accent);
   padding: 1.25rem;
+  box-shadow: 0 2px 6px rgba(120, 70, 20, 0.08);
 }
 .stat-label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
-.stat-value { font-size: 1.8rem; font-weight: 700; margin-top: 0.25rem; }
+.stat-value { font-size: 1.8rem; font-weight: 700; margin-top: 0.25rem; color: var(--primary); }
 .stat-sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
 
 .table { width: 100%; border-collapse: collapse; }
@@ -124,7 +146,7 @@ a { color: var(--primary); }
 .form-inline input, .form-inline select {
   padding: 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 0.95rem;
 }
 .form-inline { display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; }
@@ -135,8 +157,8 @@ a { color: var(--primary); }
 
 .btn {
   display: inline-block;
-  padding: 0.55rem 1.1rem;
-  border-radius: 6px;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
   border: none;
   font-size: 0.9rem;
   font-weight: 600;
@@ -146,9 +168,10 @@ a { color: var(--primary); }
 }
 .btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { background: var(--primary-dark); }
-.btn-secondary { background: #edf2f7; color: var(--text); }
+.btn-secondary { background: var(--accent); color: var(--text); }
+.btn-secondary:hover { background: var(--accent-dark); }
 .btn-small { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
-.btn-danger { background: #fed7d7; color: var(--danger); }
+.btn-danger { background: #fde2e2; color: var(--danger); }
 .btn-block { width: 100%; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -173,14 +196,18 @@ a { color: var(--primary); }
 .login-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 20px;
+  border-top: 6px solid var(--primary);
+  box-shadow: 0 6px 18px rgba(120, 70, 20, 0.15);
   padding: 2rem;
-  width: 320px;
+  width: 340px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.login-card h1 { margin: 0; font-size: 1.3rem; }
+.login-card h1 { margin: 0; font-size: 1.5rem; color: var(--primary); text-align: center; }
+.login-card .muted { text-align: center; margin: 0; }
+.login-logo { height: 72px; width: 72px; align-self: center; }
 
 /* POS screen */
 .pos-layout {
@@ -197,7 +224,7 @@ a { color: var(--primary); }
   padding: 0.6rem;
   margin: 0.75rem 0;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 1rem;
 }
 .product-grid {
@@ -208,7 +235,7 @@ a { color: var(--primary); }
 .product-tile {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 0.75rem;
   cursor: pointer;
   text-align: left;
@@ -216,7 +243,7 @@ a { color: var(--primary); }
   flex-direction: column;
   gap: 0.2rem;
 }
-.product-tile:hover { border-color: var(--primary); }
+.product-tile:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255, 199, 44, 0.45); }
 .product-name { font-weight: 600; font-size: 0.9rem; }
 .product-price { color: var(--primary); font-weight: 600; }
 .product-stock { color: var(--muted); font-size: 0.75rem; }
@@ -224,7 +251,8 @@ a { color: var(--primary); }
 .pos-cart {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
+  border-top: 5px solid var(--primary);
   padding: 1rem;
   align-self: flex-start;
   position: sticky;
@@ -249,7 +277,7 @@ a { color: var(--primary); }
 #checkoutForm input {
   padding: 0.6rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 1rem;
 }
 
@@ -265,4 +293,8 @@ a { color: var(--primary); }
   color: var(--muted);
   font-size: 0.8rem;
   padding: 1.5rem 1rem;
+}
+.brand.logo {
+  height: 32px;
+  vertical-align: middle;
 }
