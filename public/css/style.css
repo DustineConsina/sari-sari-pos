@@ -182,9 +182,10 @@ a { color: var(--primary); }
   justify-content: center;
 }
 
-.login-logo {
+.login-logo ,
+.brand-logo {
   display: block;
-  width: 120px;
+  width: 180px;
   margin: 0 auto;
 }
  .welcome{
