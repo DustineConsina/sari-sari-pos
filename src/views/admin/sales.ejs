@@ -26,7 +26,7 @@
               <td><%= peso(s.total_amount) %></td>
               <td><%= peso(s.amount_paid) %></td>
               <td><%= peso(s.change_amount) %></td>
-              <td><%= s.created_at %></td>
+              <td><%= new Date(s.created_at).toLocaleString('en-PH') %></td>
             </tr>
           <% }) %>
         </tbody>
