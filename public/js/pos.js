@@ -142,10 +142,10 @@
       productGrid.innerHTML = products
         .map(
           (p) => `
-        <button type="button" class="product-tile" data-id="${p.id}" data-name="${escapeAttr(p.name)}" data-price="${p.selling_price}" data-stock="${p.stock_quantity}" data-unit="${escapeAttr(p.unit)}" data-image="${escapeAttr(p.image_url || '')}">
+        <button type="button" class="product-tile" data-id="${p.id}" data-name="${escapeAttr(p.name)}" data-price="${p.selling_price}" data-stock="${p.stock_quantity}" data-unit="${escapeAttr(p.unit)}">
           ${
-            p.image_url
-              ? `<span class="product-img"><img src="${escapeAttr(p.image_url)}" alt="" loading="lazy" /></span>`
+            p.has_image
+              ? `<span class="product-img"><img src="/pos/product-image/${p.id}?v=${new Date(p.updated_at).getTime()}" alt="" loading="lazy" /></span>`
               : '<span class="product-img placeholder">🍽️</span>'
           }
           <span class="product-name">${escapeHtml(p.name)}</span>

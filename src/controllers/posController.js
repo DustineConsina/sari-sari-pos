@@ -5,7 +5,9 @@ const { setFlash } = require('../middleware/flash');
 async function posScreen(req, res, next) {
   try {
     const { rows: products } = await query(
-      'SELECT * FROM products WHERE active = TRUE AND stock_quantity > 0 ORDER BY name'
+      `SELECT id, name, unit, selling_price, stock_quantity, reorder_level, updated_at,
+              (image_url IS NOT NULL) AS has_image
+       FROM products WHERE active = TRUE AND stock_quantity > 0 ORDER BY name`
     );
     res.render('pos/index', { title: 'Point of Sale', products });
   } catch (err) {
@@ -17,11 +19,37 @@ async function searchProducts(req, res, next) {
   try {
     const q = `%${req.query.q || ''}%`;
     const { rows: products } = await query(
-      `SELECT id, name, barcode, unit, selling_price, stock_quantity, image_url
+      `SELECT id, name, barcode, unit, selling_price, stock_quantity, updated_at,
+              (image_url IS NOT NULL) AS has_image
        FROM products WHERE active = TRUE AND (name ILIKE $1 OR barcode ILIKE $1) ORDER BY name LIMIT 20`,
       [q]
     );
     res.json(products);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Naghahatid ng larawan ng produkto. Ang larawan ay nakalagay sa database bilang data URL,
+// kaya ginagawa itong tunay na image file para ma-cache ng browser.
+async function productImage(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) return res.status(404).end();
+
+    const { rows } = await query('SELECT image_url FROM products WHERE id = $1', [id]);
+    const value = rows[0] && rows[0].image_url;
+    if (!value) return res.status(404).end();
+
+    const match = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(value);
+    if (match) {
+      res.set('Content-Type', match[1]);
+      res.set('Cache-Control', 'private, max-age=604800');
+      return res.send(Buffer.from(match[2], 'base64'));
+    }
+
+    // Lumang link ("/images/..." o "http(s)://...")
+    return res.redirect(value);
   } catch (err) {
     next(err);
   }
@@ -111,7 +139,10 @@ async function viewReceipt(req, res, next) {
 async function inventoryScreen(req, res, next) {
   try {
     const [products, myReports] = await Promise.all([
-      query('SELECT * FROM products WHERE active = TRUE ORDER BY name').then((r) => r.rows),
+      query(
+        `SELECT id, name, unit, stock_quantity, reorder_level
+         FROM products WHERE active = TRUE ORDER BY name`
+      ).then((r) => r.rows),
       query(
         `SELECT inventory_reports.*, products.name AS product_name
          FROM inventory_reports JOIN products ON products.id = inventory_reports.product_id
@@ -171,6 +202,7 @@ async function postInventoryReport(req, res) {
 module.exports = {
   posScreen,
   searchProducts,
+  productImage,
   postCheckout,
   viewReceipt,
   inventoryScreen,
