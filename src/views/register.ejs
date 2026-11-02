@@ -1,9 +1,9 @@
 <%- include('partials/head') %>
 <div class="login-page">
   <form method="POST" action="/register" class="login-card">
-    <img src="/images/logo.svg" alt="Sari-Sari POS logo" class="login-logo" />
-    <h1>Sari-Sari POS</h1>
-    <p class="muted">Create an account</p>
+    <img src="/images/Jollibee-logo.webp" alt="Jollibee" class="login-logo" />
+    <h1>Join Jollibee</h1>
+    <p class="muted">Create an account to start taking orders</p>
     <% if (flash && flash.error) { %><div class="alert alert-error"><%= flash.error %></div><% } %>
 
     <label>Full Name
@@ -28,13 +28,13 @@
       <input type="text" name="admin_code" id="adminCodeInput" autocomplete="off" />
     </label>
     <% if (!adminSignupEnabled) { %>
-      <p class="muted" style="font-size: 0.8rem; margin: -0.5rem 0 0;">
+      <p class="muted form-note">
         Admin self-registration is currently disabled. New admins must be created from the Admin &gt; Users page.
       </p>
     <% } %>
 
     <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-    <p class="muted" style="text-align: center; margin: 0;">
+    <p class="muted login-foot">
       Already have an account? <a href="/login">Login</a>
     </p>
   </form>
