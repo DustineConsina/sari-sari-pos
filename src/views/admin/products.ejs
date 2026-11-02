@@ -20,9 +20,12 @@
         <label>Selling Price <input type="number" step="0.01" name="selling_price" required /></label>
         <label>Stock Quantity <input type="number" name="stock_quantity" value="0" /></label>
         <label>Reorder Level <input type="number" name="reorder_level" value="5" /></label>
-        <label class="form-wide">Image URL
-          <input type="text" name="image_url" placeholder="/images/products/chickenjoy.jpg" />
-        </label>
+        <div class="form-wide image-picker">
+          <span class="field-label">Product Image (optional)</span>
+          <span class="image-preview">🍽️</span>
+          <input type="file" accept="image/*" class="image-file" />
+          <input type="hidden" name="image_data" class="image-data" />
+        </div>
         <button type="submit" class="btn btn-primary form-submit">Add Product</button>
       </form>
     </div>
@@ -46,7 +49,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Name</th><th>Category</th><th>Unit</th><th>Cost</th><th>Price</th><th>Stock</th><th>Reorder</th><th>Image URL</th><th>Active</th><th></th>
+            <th>Name</th><th>Category</th><th>Unit</th><th>Cost</th><th>Price</th><th>Stock</th><th>Reorder</th><th>Image</th><th>Active</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +70,22 @@
                 <td><input form="<%= fid %>" type="number" step="0.01" name="selling_price" value="<%= p.selling_price %>" size="6" /></td>
                 <td><input form="<%= fid %>" type="number" name="stock_quantity" value="<%= p.stock_quantity %>" size="4" /></td>
                 <td><input form="<%= fid %>" type="number" name="reorder_level" value="<%= p.reorder_level %>" size="4" /></td>
-                <td><input form="<%= fid %>" type="text" name="image_url" value="<%= p.image_url || '' %>" placeholder="/images/products/..." /></td>
+                <td>
+                  <div class="image-picker">
+                    <span class="image-preview">
+                      <% if (p.image_url) { %>
+                        <img src="/pos/product-image/<%= p.id %>?v=<%= new Date(p.updated_at).getTime() %>" alt="" loading="lazy" />
+                      <% } else { %>🍽️<% } %>
+                    </span>
+                    <input type="file" accept="image/*" class="image-file" />
+                    <input form="<%= fid %>" type="hidden" name="image_data" class="image-data" />
+                    <% if (p.image_url) { %>
+                      <label class="remove-image">
+                        <input form="<%= fid %>" type="checkbox" name="remove_image" value="1" /> Remove
+                      </label>
+                    <% } %>
+                  </div>
+                </td>
                 <td><input form="<%= fid %>" type="checkbox" name="active" value="1" <%= p.active ? 'checked' : '' %> /></td>
                 <td>
                   <form id="<%= fid %>" method="POST" action="/admin/products/<%= p.id %>"></form>
@@ -80,4 +98,64 @@
     </div>
   </div>
 </main>
+
+<script>
+  // Liliitin ang piniling larawan sa browser (max 320x240 JPEG) bago ipadala.
+  function compressImage(file, maxW, maxH) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = function () {
+        var img = new Image();
+        img.onerror = reject;
+        img.onload = function () {
+          var scale = Math.min(maxW / img.width, maxH / img.height, 1);
+          var w = Math.round(img.width * scale);
+          var h = Math.round(img.height * scale);
+          var canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          var quality = 0.8;
+          var data = canvas.toDataURL('image/jpeg', quality);
+          while (data.length > 70000 && quality > 0.3) {
+            quality -= 0.1;
+            data = canvas.toDataURL('image/jpeg', quality);
+          }
+          resolve(data);
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.querySelectorAll('input.image-file').forEach(function (input) {
+    input.addEventListener('change', async function () {
+      var picker = input.closest('.image-picker');
+      var hidden = picker.querySelector('input.image-data');
+      var preview = picker.querySelector('.image-preview');
+      var file = input.files[0];
+      if (!file) { hidden.value = ''; return; }
+      if (file.type.indexOf('image/') !== 0) {
+        alert('Please choose an image file.');
+        input.value = '';
+        hidden.value = '';
+        return;
+      }
+      try {
+        var data = await compressImage(file, 320, 240);
+        hidden.value = data;
+        preview.innerHTML = '<img src="' + data + '" alt="" />';
+      } catch (e) {
+        alert('Could not read that image. Try another one.');
+        input.value = '';
+        hidden.value = '';
+      }
+    });
+  });
+</script>
 <%- include('../partials/foot') %>
