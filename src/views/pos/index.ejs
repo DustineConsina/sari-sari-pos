@@ -2,7 +2,7 @@
 <%- include('../partials/nav') %>
 <main class="container pos-layout">
   <div class="pos-products">
-    <h1>Point of Sale</h1>
+    <h1>Order Counter</h1>
     <input type="search" id="productSearch" placeholder="Search product or scan barcode..." autofocus />
     <div class="product-grid" id="productGrid">
       <% products.forEach(p => { %>
@@ -14,7 +14,13 @@
           data-price="<%= p.selling_price %>"
           data-stock="<%= p.stock_quantity %>"
           data-unit="<%= p.unit %>"
+          data-image="<%= p.image_url || '' %>"
         >
+          <% if (p.image_url) { %>
+            <span class="product-img"><img src="<%= p.image_url %>" alt="" loading="lazy" /></span>
+          <% } else { %>
+            <span class="product-img placeholder">🍽️</span>
+          <% } %>
           <span class="product-name"><%= p.name %></span>
           <span class="product-price"><%= peso(p.selling_price) %></span>
           <span class="product-stock"><%= p.stock_quantity %> <%= p.unit %> left</span>
@@ -24,7 +30,7 @@
   </div>
 
   <div class="pos-cart">
-    <h2>Cart</h2>
+    <h2>Your Order</h2>
     <table class="table" id="cartTable">
       <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr></thead>
       <tbody id="cartBody"></tbody>
