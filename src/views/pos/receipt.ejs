@@ -2,9 +2,12 @@
 <%- include('../partials/nav') %>
 <main class="container">
   <div class="card receipt">
-    <h1>Receipt</h1>
-    <p><strong>Receipt No:</strong> <%= sale.receipt_no %></p>
-    <p><strong>Date:</strong> <%= sale.created_at %></p>
+    <div class="receipt-head">
+      <img src="/images/Jollibee-logo.webp" alt="Jollibee" class="receipt-logo" />
+      <h1>Receipt</h1>
+    </div>
+    <p class="receipt-meta"><span>Receipt No</span> <strong><%= sale.receipt_no %></strong></p>
+    <p class="receipt-meta"><span>Date</span> <strong><%= new Date(sale.created_at).toLocaleString('en-PH') %></strong></p>
     <table class="table">
       <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
       <tbody>
@@ -18,11 +21,12 @@
         <% }) %>
       </tbody>
       <tfoot>
-        <tr><td colspan="3">Total</td><td><%= peso(sale.total_amount) %></td></tr>
+        <tr class="total-row"><td colspan="3">Total</td><td><%= peso(sale.total_amount) %></td></tr>
         <tr><td colspan="3">Amount Paid</td><td><%= peso(sale.amount_paid) %></td></tr>
         <tr><td colspan="3">Change</td><td><%= peso(sale.change_amount) %></td></tr>
       </tfoot>
     </table>
+    <p class="receipt-thanks">Thank you! Come again. 🍗</p>
     <div class="receipt-actions">
       <button onclick="window.print()" class="btn btn-secondary">Print</button>
       <a href="/pos" class="btn btn-primary">New Sale</a>

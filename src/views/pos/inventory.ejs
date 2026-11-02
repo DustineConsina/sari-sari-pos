@@ -23,7 +23,7 @@
       </label>
       <label>Quantity <input type="number" name="quantity" min="1" required /></label>
       <label>Note <input type="text" name="note" placeholder="Optional remarks" /></label>
-      <button type="submit" class="btn btn-primary">Submit Report</button>
+      <button type="submit" class="btn btn-primary form-submit">Submit Report</button>
     </form>
   </div>
 
@@ -34,7 +34,10 @@
       <tbody>
         <% products.forEach(p => { %>
           <tr class="<%= p.stock_quantity <= p.reorder_level ? 'row-warning' : '' %>">
-            <td><%= p.name %></td>
+            <td>
+              <%= p.name %>
+              <% if (p.stock_quantity <= p.reorder_level) { %><span class="badge badge-low">Low stock</span><% } %>
+            </td>
             <td><%= p.stock_quantity %> <%= p.unit %></td>
             <td><%= p.reorder_level %></td>
           </tr>
@@ -54,10 +57,10 @@
           <% myReports.forEach(r => { %>
             <tr>
               <td><%= r.product_name %></td>
-              <td><%= r.type %></td>
-              <td><%= r.quantity_change > 0 ? '+' : '' %><%= r.quantity_change %></td>
+              <td><span class="badge badge-<%= r.type %>"><%= r.type %></span></td>
+              <td class="<%= r.quantity_change > 0 ? 'qty-up' : 'qty-down' %>"><%= r.quantity_change > 0 ? '+' : '' %><%= r.quantity_change %></td>
               <td><%= r.note || '—' %></td>
-              <td><%= r.created_at %></td>
+              <td><%= new Date(r.created_at).toLocaleString('en-PH') %></td>
             </tr>
           <% }) %>
         </tbody>
