@@ -1,10 +1,13 @@
 <%- include('../partials/head') %>
 <%- include('../partials/nav') %>
 <main class="container">
-  <h1>Receipt <%= sale.receipt_no %></h1>
-  <div class="card">
-    <p><strong>Cashier:</strong> <%= sale.cashier %></p>
-    <p><strong>Date:</strong> <%= sale.created_at %></p>
+  <div class="card receipt">
+    <div class="receipt-head">
+      <img src="/images/Jollibee-logo.webp" alt="Jollibee" class="receipt-logo" />
+      <h1>Receipt <%= sale.receipt_no %></h1>
+    </div>
+    <p class="receipt-meta"><span>Cashier</span> <strong><%= sale.cashier %></strong></p>
+    <p class="receipt-meta"><span>Date</span> <strong><%= new Date(sale.created_at).toLocaleString('en-PH') %></strong></p>
     <table class="table">
       <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
       <tbody>
@@ -18,12 +21,15 @@
         <% }) %>
       </tbody>
       <tfoot>
-        <tr><td colspan="3">Total</td><td><%= peso(sale.total_amount) %></td></tr>
+        <tr class="total-row"><td colspan="3">Total</td><td><%= peso(sale.total_amount) %></td></tr>
         <tr><td colspan="3">Amount Paid</td><td><%= peso(sale.amount_paid) %></td></tr>
         <tr><td colspan="3">Change</td><td><%= peso(sale.change_amount) %></td></tr>
       </tfoot>
     </table>
-    <a href="/admin/sales" class="btn btn-secondary">Back to Sales</a>
+    <div class="receipt-actions">
+      <a href="/admin/sales" class="btn btn-secondary">Back to Sales</a>
+      <button onclick="window.print()" class="btn btn-primary">Print</button>
+    </div>
   </div>
 </main>
 <%- include('../partials/foot') %>
