@@ -17,7 +17,7 @@ async function searchProducts(req, res, next) {
   try {
     const q = `%${req.query.q || ''}%`;
     const { rows: products } = await query(
-      `SELECT id, name, barcode, unit, selling_price, stock_quantity
+      `SELECT id, name, barcode, unit, selling_price, stock_quantity, image_url
        FROM products WHERE active = TRUE AND (name ILIKE $1 OR barcode ILIKE $1) ORDER BY name LIMIT 20`,
       [q]
     );
