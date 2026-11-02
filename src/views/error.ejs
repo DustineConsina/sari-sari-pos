@@ -1,10 +1,14 @@
 <%- include('partials/head') %>
 <%- include('partials/nav') %>
 <main class="container">
-  <div class="card">
-    <h1><%= title || 'Error' %></h1>
-    <p><%= message %></p>
-    <a href="/" class="btn btn-primary">Go home</a>
+  <div class="card error-card">
+    <img src="/images/Jollibee-logo.webp" alt="Jollibee" class="error-logo" />
+    <h1><%= title || 'Something went wrong' %></h1>
+    <p class="error-message"><%= message %></p>
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">Go home</a>
+      <a href="javascript:history.back()" class="btn btn-secondary">Go back</a>
+    </div>
   </div>
 </main>
 <%- include('partials/foot') %>
