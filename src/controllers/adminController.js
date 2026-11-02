@@ -2,6 +2,13 @@ const bcrypt = require('bcryptjs');
 const { query } = require('../config/db');
 const { setFlash } = require('../middleware/flash');
 
+// Tumatanggap lang ng "/images/..." o "http(s)://..." na link. Kung hindi, walang larawan.
+function cleanImageUrl(value) {
+  const v = (value || '').trim();
+  if (!v) return null;
+  return /^(\/|https?:\/\/)/i.test(v) ? v : null;
+}
+
 async function dashboard(req, res, next) {
   try {
     const [todayTotal, weekTotal, monthTotal, trend, topProducts, lowStock, recentSales] = await Promise.all([
@@ -88,11 +95,11 @@ async function listProducts(req, res, next) {
 }
 
 async function createProduct(req, res, next) {
-  const { name, barcode, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level } = req.body;
+  const { name, barcode, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level, image_url } = req.body;
   try {
     await query(
-      `INSERT INTO products (name, barcode, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      `INSERT INTO products (name, barcode, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level, image_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         name,
         barcode || null,
@@ -102,6 +109,7 @@ async function createProduct(req, res, next) {
         Number(selling_price) || 0,
         Number(stock_quantity) || 0,
         Number(reorder_level) || 5,
+        cleanImageUrl(image_url),
       ]
     );
     setFlash(req, 'success', `Product "${name}" added.`);
@@ -114,15 +122,14 @@ async function createProduct(req, res, next) {
 
 async function updateProduct(req, res, next) {
   const { id } = req.params;
-  const { name, barcode, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level, active } = req.body;
+  const { name, category_id, unit, cost_price, selling_price, stock_quantity, reorder_level, active, image_url } = req.body;
   try {
     await query(
-      `UPDATE products SET name = $1, barcode = $2, category_id = $3, unit = $4, cost_price = $5, selling_price = $6,
-       stock_quantity = $7, reorder_level = $8, active = $9, updated_at = NOW()
+      `UPDATE products SET name = $1, category_id = $2, unit = $3, cost_price = $4, selling_price = $5,
+       stock_quantity = $6, reorder_level = $7, active = $8, image_url = $9, updated_at = NOW()
        WHERE id = $10`,
       [
         name,
-        barcode || null,
         category_id || null,
         unit || 'pc',
         Number(cost_price) || 0,
@@ -130,6 +137,7 @@ async function updateProduct(req, res, next) {
         Number(stock_quantity) || 0,
         Number(reorder_level) || 5,
         Boolean(active),
+        cleanImageUrl(image_url),
         id,
       ]
     );
