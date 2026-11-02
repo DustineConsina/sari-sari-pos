@@ -82,7 +82,7 @@
                 <td><a href="/admin/sales/<%= s.id %>"><%= s.receipt_no %></a></td>
                 <td><%= s.cashier %></td>
                 <td><%= peso(s.total_amount) %></td>
-                <td><%= s.created_at %></td>
+                <td><%= new Date(s.created_at).toLocaleString('en-PH') %></td>
               </tr>
             <% }) %>
           </tbody>
@@ -95,23 +95,32 @@
 <script src="/js/vendor/chart.umd.min.js"></script>
 <script>
   const trendData = <%- JSON.stringify(trendData) %>;
-  const ctx = document.getElementById('salesTrendChart');
-  new Chart(ctx, {
+  Chart.defaults.font.family = "'Fredoka', sans-serif";
+  Chart.defaults.color = '#86695a';
+  new Chart(document.getElementById('salesTrendChart'), {
     type: 'line',
     data: {
       labels: trendData.map(d => d.day.slice(5)),
       datasets: [{
         label: 'Sales (₱)',
         data: trendData.map(d => d.total),
-        borderColor: '#2b6cb0',
-        backgroundColor: 'rgba(43, 108, 176, 0.15)',
+        borderColor: '#e4002b',
+        backgroundColor: 'rgba(255, 199, 44, 0.35)',
+        borderWidth: 3,
+        pointBackgroundColor: '#ffc72c',
+        pointBorderColor: '#e4002b',
+        pointBorderWidth: 2,
+        pointRadius: 5,
         tension: 0.3,
         fill: true,
       }],
     },
     options: {
       plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => '₱' + v } },
+        x: { grid: { display: false } },
+      },
     },
   });
 </script>

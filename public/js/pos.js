@@ -29,6 +29,7 @@
   function addToCart(tile) {
     const id = tile.dataset.id;
     const stock = Number(tile.dataset.stock);
+    if (stock <= 0) return; // out of stock
     const existing = cart.get(id);
     if (existing) {
       if (existing.qty < stock) existing.qty += 1;
@@ -66,6 +67,11 @@
     cartBody.innerHTML = '';
     let total = 0;
 
+    if (cart.size === 0) {
+      cartBody.innerHTML =
+        '<tr class="cart-empty"><td colspan="5">Your order is empty. Tap a product to add it.</td></tr>';
+    }
+
     cart.forEach((item) => {
       const subtotal = item.price * item.qty;
       total += subtotal;
@@ -73,13 +79,15 @@
       tr.innerHTML = `
         <td>${escapeHtml(item.name)}</td>
         <td>${peso(item.price)}</td>
-        <td class="qty-controls">
-          <button type="button" data-action="dec" data-id="${item.id}" class="btn btn-small">−</button>
-          ${item.qty}
-          <button type="button" data-action="inc" data-id="${item.id}" class="btn btn-small">+</button>
+        <td>
+          <div class="qty-controls">
+            <button type="button" data-action="dec" data-id="${item.id}" class="btn btn-secondary btn-qty" aria-label="Decrease">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button type="button" data-action="inc" data-id="${item.id}" class="btn btn-secondary btn-qty" aria-label="Increase">+</button>
+          </div>
         </td>
         <td>${peso(subtotal)}</td>
-        <td><button type="button" data-action="remove" data-id="${item.id}" class="btn btn-small btn-danger">✕</button></td>
+        <td><button type="button" data-action="remove" data-id="${item.id}" class="btn btn-danger btn-qty" aria-label="Remove">✕</button></td>
       `;
       cartBody.appendChild(tr);
     });
@@ -134,7 +142,12 @@
       productGrid.innerHTML = products
         .map(
           (p) => `
-        <button type="button" class="product-tile" data-id="${p.id}" data-name="${escapeAttr(p.name)}" data-price="${p.selling_price}" data-stock="${p.stock_quantity}" data-unit="${escapeAttr(p.unit)}">
+        <button type="button" class="product-tile" data-id="${p.id}" data-name="${escapeAttr(p.name)}" data-price="${p.selling_price}" data-stock="${p.stock_quantity}" data-unit="${escapeAttr(p.unit)}" data-image="${escapeAttr(p.image_url || '')}">
+          ${
+            p.image_url
+              ? `<span class="product-img"><img src="${escapeAttr(p.image_url)}" alt="" loading="lazy" /></span>`
+              : '<span class="product-img placeholder">🍽️</span>'
+          }
           <span class="product-name">${escapeHtml(p.name)}</span>
           <span class="product-price">${peso(p.selling_price)}</span>
           <span class="product-stock">${p.stock_quantity} ${escapeHtml(p.unit)} left</span>
