@@ -63,3 +63,5 @@ CREATE INDEX IF NOT EXISTS idx_sale_items_sale_id ON sale_items(sale_id);
 CREATE INDEX IF NOT EXISTS idx_sale_items_product_id ON sale_items(product_id);
 CREATE INDEX IF NOT EXISTS idx_inventory_reports_created_at ON inventory_reports(created_at);
 CREATE INDEX IF NOT EXISTS idx_products_active ON products(active);
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS image_url TEXT;
