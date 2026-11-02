@@ -15,7 +15,7 @@
           <option value="admin">Admin</option>
         </select>
       </label>
-      <button type="submit" class="btn btn-primary">Create User</button>
+      <button type="submit" class="btn btn-primary form-submit">Create User</button>
     </form>
   </div>
 
@@ -28,9 +28,9 @@
           <tr class="<%= !u.active ? 'row-muted' : '' %>">
             <td><%= u.username %></td>
             <td><%= u.full_name %></td>
-            <td><%= u.role === 'admin' ? 'Admin' : 'Sales Rep' %></td>
-            <td><%= u.active ? 'Active' : 'Inactive' %></td>
-            <td><%= u.created_at %></td>
+            <td><span class="badge <%= u.role === 'admin' ? 'badge-admin' : '' %>"><%= u.role === 'admin' ? 'Admin' : 'Cashier' %></span></td>
+            <td><span class="badge <%= u.active ? 'badge-active' : 'badge-inactive' %>"><%= u.active ? 'Active' : 'Inactive' %></span></td>
+            <td><%= new Date(u.created_at).toLocaleDateString('en-PH') %></td>
             <td>
               <form method="POST" action="/admin/users/<%= u.id %>/toggle-active" class="inline-form">
                 <button type="submit" class="btn btn-small"><%= u.active ? 'Deactivate' : 'Activate' %></button>
